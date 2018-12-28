@@ -1,0 +1,32 @@
+/**
+ * title: 传化油链 - 测试页面
+ */
+
+/*在约定式路由里，注释必须写在文件头，否则将不被识别
+title 的":" 与内容需要间隔空格，否则不被识别*/
+
+import {connect} from 'dva';
+import styles from './index.css';
+
+function Home() {
+    return (
+        <div className={styles.normal}>
+            <div className={styles.welcome}/>
+            <ul className={styles.list}>
+                <li>To get started, edit <code>src/pages/index.js</code> and save to reload.</li>
+                <li><a href="https://umijs.org/guide/getting-started.html">Getting Started</a></li>
+            </ul>
+        </div>
+    );
+}
+
+/*注入多个model*/
+function mapStateToProps(state) {
+    return {
+        global: state.global,
+        example: state.example,
+        // loading: state.loading.effects['example/query'],  通过loading.effects注入接口的loading状态。
+    };
+}
+
+export default connect(mapStateToProps)(Home);
