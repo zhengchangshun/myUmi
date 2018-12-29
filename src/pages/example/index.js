@@ -35,6 +35,7 @@ class Example extends React.Component {
     render() {
         return (
             <div className={styles.normal}>
+                <h1>可以自行过react chrome devtool查看接口返回的数据。</h1>
                 <div className={styles.welcome}/>
                 <ul className={styles.list}>
                     <li>To get started, edit <code>src/pages/index.js</code> and save to reload.</li>

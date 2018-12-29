@@ -3,6 +3,7 @@ import {message} from 'antd';
 import {parseJSON, stitchUrlParam, queryString} from './utils'
 
 const specialCode = []
+const contentTypeEnum = ['json', 'form']
 
 let defaultOpts = {
     headers: {
@@ -60,16 +61,25 @@ function request(url, options, contentType) {
 
 /**
  *  get请求
+ *  url :请求地址
+ *  params：请求参数
  */
-export function requestGet(url, params) {
+export function requestGet(url, params = {}) {
     url = stitchUrlParam(url, queryString(params));
     return request(url, {method: "GET"})
 }
 
 /**
  *  post请求 ,默认请求 content-Type:form
+ *   url :请求地址
+ *  params：请求参数
+ *  contentType：请求方式 contentType
  */
-export function requestPost(url, params, contentType = 'form') {
+export function requestPost(url, params = {}, contentType = 'form') {
+    if (!contentTypeEnum.includes(contentType)) {
+        message.error(`请设置正确的请求头【form，json】`, 2);
+        return;
+    }
     let body = contentType === 'form' ? queryString(params) : JSON.stringify(params);
     let options = {
         body,
@@ -79,11 +89,6 @@ export function requestPost(url, params, contentType = 'form') {
 }
 
 /*post请求,设置content-Type:json */
-export function requestPostJson(url, params) {
+export function requestPostJson(url, params = {}) {
     return requestPost(url, params, 'json')
-}
-
-/*post请求,设置content-Type:form */
-export function requestPostForm(url, params) {
-    return requestPost(url, params, 'from')
 }
