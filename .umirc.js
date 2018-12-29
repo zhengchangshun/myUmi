@@ -1,5 +1,6 @@
 // ref: https://umijs.org/config/
 export default {
+    history: 'hash',
     plugins: [
         // ref: https://umijs.org/plugin/umi-plugin-react.html
         ['umi-plugin-react', {
@@ -14,7 +15,7 @@ export default {
                     /models\//,
                     /components\//,
                     /services\//,
-                    /readMe.md/
+                    /readme\.md/
                 ],
             },
         }],
