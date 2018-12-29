@@ -1,6 +1,6 @@
 import fetch from 'dva/fetch';
 import {message} from 'antd';
-import qs from 'query-string';
+import {parseJSON, stitchUrlParam, queryString} from './utils'
 
 const specialCode = []
 
@@ -9,16 +9,6 @@ let defaultOpts = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     }
 };
-
-function parseJSON(response) {
-    return response.json();
-}
-
-/*url拼接参数*/
-function stitchUrlParam(url, param) {
-    let symbol = url.indexOf('?') === -1 ? '?' : '&';
-    return url + symbol + param;
-}
 
 /*网络请求错误*/
 function checkStatus(response) {
@@ -72,7 +62,7 @@ function request(url, options, contentType) {
  *  get请求
  */
 export function requestGet(url, params) {
-    url = stitchUrlParam(url, qs.stringify(params));
+    url = stitchUrlParam(url, queryString(params));
     return request(url, {method: "GET"})
 }
 
@@ -80,7 +70,7 @@ export function requestGet(url, params) {
  *  post请求 ,默认请求 content-Type:form
  */
 export function requestPost(url, params, contentType = 'form') {
-    let body = contentType === 'form' ? qs.stringify(params) : JSON.stringify(params);
+    let body = contentType === 'form' ? queryString(params) : JSON.stringify(params);
     let options = {
         body,
         method: 'POST'
