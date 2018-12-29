@@ -5,19 +5,44 @@
 /*在约定式路由里，注释必须写在文件头，否则将不被识别
 title 的":" 与内容需要间隔空格，否则不被识别*/
 
+import React from 'react'
 import {connect} from 'dva';
 import styles from './index.css';
 
-function Home() {
-    return (
-        <div className={styles.normal}>
-            <div className={styles.welcome}/>
-            <ul className={styles.list}>
-                <li>To get started, edit <code>src/pages/index.js</code> and save to reload.</li>
-                <li><a href="https://umijs.org/guide/getting-started.html">Getting Started</a></li>
-            </ul>
-        </div>
-    );
+class Example extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    componentDidMount() {
+        this.props.dispatch({
+            type: "example/getMethodsHttp",
+            payload: {
+                test: '1111'
+            }
+        })
+
+        this.props.dispatch({
+            type: "example/postMethodsHttp",
+            payload: {
+                pageNum: 1,
+                pageSize: 8
+            }
+        })
+    }
+
+
+    render() {
+        return (
+            <div className={styles.normal}>
+                <div className={styles.welcome}/>
+                <ul className={styles.list}>
+                    <li>To get started, edit <code>src/pages/index.js</code> and save to reload.</li>
+                    <li><a href="https://umijs.org/guide/getting-started.html">Getting Started</a></li>
+                </ul>
+            </div>
+        )
+    }
 }
 
 /*注入多个model*/
@@ -29,4 +54,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(Example);

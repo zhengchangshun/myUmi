@@ -5,8 +5,6 @@ import qs from 'query-string';
 const specialCode = []
 
 let defaultOpts = {
-    method: 'POST',
-    credentials: 'same-origin',
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     }
@@ -35,7 +33,7 @@ function checkStatus(response) {
 /*业务请求错误*/
 function checkResult(url, data) {
     const code = data.code;
-    if (code !== '0' && !specialCode.includes(code)) {
+    if (code != '0' && !specialCode.includes(code)) {
         throwException(url, data, code);
     }
     return data;
@@ -47,7 +45,6 @@ function throwException(url, data, code) {
     message.error(`${msg}`, 2);
     throw data;
 }
-
 /**
  * Requests a URL, returning a promise.
  *
@@ -63,25 +60,26 @@ function request(url, options, contentType = 'form') {
     }
     options = Object.assign({}, defaultOpts, options);
 
+    console.log(options);
+
+    debugger
     return fetch(url, options)
         .then(checkStatus)
         .then(parseJSON)
-        .then(data => ({data}))
-        .then(data => checkResult(url, data))
-        .catch(err => ({err}));
+        .then((data) => checkResult(url, data))
 }
 
 /*get请求参数拼接在url后*/
-function requestGet(url, params) {
+export function requestGet(url, params) {
     let {contentType} = params
     delete params.contentType;
 
     url = stitchUrlParam(url, qs.stringify(params));
-    request(url, {method: "GET"}, contentType)
+    return request(url, {method: "GET"}, contentType)
 }
 
 /*post请求参数设置到body上*/
-function requestPost(url, params) {
+export function requestPost(url, params) {
     let {contentType} = params
     delete params.contentType;
 
@@ -89,5 +87,5 @@ function requestPost(url, params) {
         body: params,
         method: 'POST'
     }
-    request(url, options, contentType)
+    return  request(url, options, contentType)
 }
