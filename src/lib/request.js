@@ -45,6 +45,7 @@ function throwException(url, data, code) {
     message.error(`${msg}`, 2);
     throw data;
 }
+
 /**
  * Requests a URL, returning a promise.
  *
@@ -52,7 +53,7 @@ function throwException(url, data, code) {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-function request(url, options, contentType = 'form') {
+function request(url, options, contentType) {
     if (contentType === 'json') {
         options.headers = {
             'Content-Type': 'application/json;charset=UTF-8'
@@ -60,32 +61,39 @@ function request(url, options, contentType = 'form') {
     }
     options = Object.assign({}, defaultOpts, options);
 
-    console.log(options);
-
-    debugger
     return fetch(url, options)
         .then(checkStatus)
         .then(parseJSON)
         .then((data) => checkResult(url, data))
+        .catch(err => ({err}));
 }
 
-/*get请求参数拼接在url后*/
+/**
+ *  get请求
+ */
 export function requestGet(url, params) {
-    let {contentType} = params
-    delete params.contentType;
-
     url = stitchUrlParam(url, qs.stringify(params));
-    return request(url, {method: "GET"}, contentType)
+    return request(url, {method: "GET"})
 }
 
-/*post请求参数设置到body上*/
-export function requestPost(url, params) {
-    let {contentType} = params
-    delete params.contentType;
-
+/**
+ *  post请求 ,默认请求 content-Type:form
+ */
+export function requestPost(url, params, contentType = 'form') {
+    let body = contentType === 'form' ? qs.stringify(params) : JSON.stringify(params);
     let options = {
-        body: params,
+        body,
         method: 'POST'
     }
-    return  request(url, options, contentType)
+    return request(url, options, contentType)
+}
+
+/*post请求,设置content-Type:json */
+export function requestPostJson(url, params) {
+    return requestPost(url, params, 'json')
+}
+
+/*post请求,设置content-Type:form */
+export function requestPostForm(url, params) {
+    return requestPost(url, params, 'from')
 }
