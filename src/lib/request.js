@@ -61,19 +61,22 @@ function request(url, options, contentType) {
 
 /**
  *  get请求
- *  url :请求地址
- *  params：请求参数
+ * @param url :请求地址
+ * @param params:请求参数
+ * @returns 返回Promise对象
  */
 export function requestGet(url, params = {}) {
     url = stitchUrlParam(url, queryString(params));
     return request(url, {method: "GET"})
 }
 
+
 /**
  *  post请求 ,默认请求 content-Type:form
- *   url :请求地址
- *  params：请求参数
- *  contentType：请求方式 contentType
+ * @param url :请求地址
+ * @param params:请求参数
+ * @param contentType: content-type设置
+ * @returns 返回Promise对象
  */
 export function requestPost(url, params = {}, contentType = 'form') {
     if (!contentTypeEnum.includes(contentType)) {
