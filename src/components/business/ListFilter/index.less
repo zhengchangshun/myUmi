@@ -1,0 +1,63 @@
+.listFilterWrap {
+    padding-top: 20px;
+    display: flex;
+    .filterContent {
+        flex: 1;
+        .filterRow {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+    }
+    .btnGroup {
+        width: 150px;
+        padding-left: 20px;
+        display: flex;
+        justify-content: space-around;
+    }
+    :global {
+        .ant-row {
+            margin-bottom: 0;
+            .ant-form-item {
+                margin-bottom: 24px;
+                .ant-form-item-label {
+                    height: 28px;
+                    line-height: 28px;
+                    label {
+                        font-size: 12px;
+                        color: #4B5564;
+                    }
+                }
+                .ant-form-item-control-wrapper {
+                    .ant-form-item-control {
+                        text-align: left;
+                        line-height: 0;
+                    }
+                    .ant-input, .ant-select, .ant-select-selection {
+                        height: 28px;
+                        line-height: 28px;
+                        padding-top: 0;
+                        padding-bottom: 0;
+                        font-size: 12px;
+                        color: #1E283C;
+                    }
+                    .ant-select-selection-selected-value, ant-select-selection__rendered {
+                        line-height: 28px;
+                    }
+                    .ant-calendar-picker {
+                        width: 100% !important;
+                    }
+                }
+            }
+
+        }
+        .ant-btn{
+            width: 56px;
+            height: 28px;
+            font-size: 12px;
+            + .ant-btn{
+                margin-right: 12px;
+            }
+        }
+    }
+}

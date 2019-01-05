@@ -7,7 +7,7 @@ export default {
             antd: true,
             dva: true,
             dynamicImport: true,
-            title: '传化油服',
+            title: 'myUmi',
             routes: {
                 exclude: [
                     /model\.(j|t)sx?$/,

@@ -1,15 +1,81 @@
-import styles from './index.css';
+import styles from './index.less';
+import React from 'react'
+import {connect} from 'dva';
+import {LocaleProvider, Layout} from 'antd';
+import zhCN from 'antd/lib/locale-provider/zh_CN';
+import router from 'umi/router'
+import {MyHeader, MySider} from '../components/index'
+
+const {Header, Sider, Content,} = Layout;
 
 /*页面布局，可以理解为一级路由*/
-function BasicLayout(props) {
-    /*不同的全局 layout你可能需要针对不同路由输出不同的全局 layout，umi 不支持这样的配置，
-    但你仍可以在 layouts/index.js 对 location.path 做区分，渲染不同的 layout。*/
-  return (
-    <div className={styles.normal}>
-      <h1 className={styles.title}>Yay! Welcome to umi! (一级路由)</h1>
-        { props.children }
-    </div>
-  );
+class BasicLayout extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    /* componentWillMount() {
+		 if (this.props.location.pathname !== '/login') {
+			 this.props.dispatch({
+				 type: 'global/queryMenuList'
+			 });
+			 this.props.dispatch({
+				 type: 'global/queryUserInfo'
+			 });
+		 }
+	 }*/
+
+    render() {
+        const {global, location, children, dispatch} = this.props
+        const {userInfo, menuList} = global
+        debugger
+        const headerProps = {
+            userInfo,
+            onExit: () => {
+                dispatch({
+                    type: 'global/exit',
+                    onComplete: () => {
+                        router.push('/login')
+                    }
+                });
+            },
+        }
+        const siderProps = {
+            menuList
+        };
+        const MyFooter = () => (
+            <div className={styles.footerContent}>Copyright © 2018 产品技术部出品</div>
+        )
+
+        if (location.pathname === '/login' || location.pathname === '/authorize') {
+            return (
+                <LocaleProvider locale={zhCN}>
+                    <div>{children}</div>
+                </LocaleProvider>
+            )
+        }
+        return (
+            <LocaleProvider locale={zhCN}>
+                <Layout className={styles.normal}>
+                    <Header>
+                        <MyHeader {...headerProps}/>
+                    </Header>
+                    <Layout>
+                        <Sider width="170">
+                            <MySider {...siderProps}/>
+                        </Sider>
+                        <Content className={styles.contentWrap}>
+                            <div className={styles.content}>
+                                {children}
+                            </div>
+                            <MyFooter/>
+                        </Content>
+                    </Layout>
+                </Layout>
+            </LocaleProvider>
+        );
+    }
+
 }
 
-export default BasicLayout;
+export default connect(({global}) => ({global}))(BasicLayout)

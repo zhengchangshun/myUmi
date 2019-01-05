@@ -1,0 +1,44 @@
+
+.normal {
+    font-family: Georgia, sans-serif;
+    width: 100%;
+    min-height: 100%;
+    background: #F0F2F5;
+    margin: 0 auto;
+    .contentWrap{
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        .content{
+            height: 100%;
+            flex: 1;
+        }
+        .footerContent{
+            font-size: 12px;
+            color: #B2B5B6;
+            height: 12px;
+            margin-top: 10px;
+        }
+    }
+
+    :global{
+        .ant-layout-header{
+            padding: 0;
+            height: auto;
+            line-height: normal;
+        }
+        .ant-layout-sider{
+            background: #171D2C;
+        }
+    }
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: normal;
+    letter-spacing: -1px;
+    background: darkslateblue;
+    padding: .6em 0;
+    color: white;
+    margin: 0;
+}
