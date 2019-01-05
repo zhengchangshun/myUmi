@@ -7,11 +7,12 @@ import styles from './index.less'
 
 const SubMenu = Menu.SubMenu;
 
+// let defaultSelectedMenu = {};
 
 class MySider extends React.Component {
     state = {
         openKeys: [],
-        defaultSelectedKey: ['1-1'],
+        defaultSelectedKey: ['1'],
     };
 
     componentWillMount() {
@@ -19,8 +20,8 @@ class MySider extends React.Component {
         const {history, menuList} = this.props;
         let path = history.location.pathname
         // 查找选中的目录
-        let defaultSelectedMenu = this.getDefaultSelectedMenu(menuList, path)
-        let defaultSelectedMenuId = defaultSelectedMenu.menuId;
+        let defaultSelectedMenu = this.getDefaultSelectedMenu(menuList, path) || {}
+        let defaultSelectedMenuId = defaultSelectedMenu.menuId || '';
         let openKeys = this.getDefaultOpenKey(defaultSelectedMenuId)
         this.setState({
             defaultSelectedKey: [defaultSelectedMenuId],
@@ -30,12 +31,17 @@ class MySider extends React.Component {
 
     /*获取默认展开的菜单的menuId*/
     getDefaultOpenKey(menuId) {
-        const menuIdList = menuId.split('-').filter(i => i);
-        const newMenuList = menuIdList.map((urlItem, index) => {
-            return `${menuIdList.slice(0, index + 1).join('-')}`;
-        });
-        /*openKey 从根目录到当前层级的父元素*/
-        return newMenuList.slice(0, newMenuList.length - 1)
+        if (menuId.length) {
+            const menuIdList = menuId.split('-').filter(i => i);
+            const newMenuList = menuIdList.map((urlItem, index) => {
+                return `${menuIdList.slice(0, index + 1).join('-')}`;
+            });
+            /*openKey 从根目录到当前层级的父元素*/
+            return newMenuList.slice(0, newMenuList.length - 1)
+        } else {
+            return []
+        }
+
     }
 
     /* url链接时，展开菜单*/

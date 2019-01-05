@@ -1,15 +1,8 @@
 export default [
     {
         menuItemName: '首页',
-        url: '',
+        url: '/',
         menuId: '1',
-        children: [
-            {
-                menuItemName: '首页-1',
-                url: '/',
-                menuId: '1-1',
-            }
-        ]
     },
     {
         menuItemName: 'Example',
