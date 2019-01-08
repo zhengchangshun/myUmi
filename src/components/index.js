@@ -5,6 +5,9 @@ import SubHeader from './basic/SubHeader'
 
 
 import ListFilter from './business/ListFilter'
+import ToggleCiphertext from './business/ToggleCiphertext'
+import AddAndEditModal from './business/AddAndEditModal'
+
 
 export {
     TfIcon,
@@ -12,4 +15,6 @@ export {
     MySider,
     SubHeader,
     ListFilter,
+    ToggleCiphertext,
+    AddAndEditModal
 }
