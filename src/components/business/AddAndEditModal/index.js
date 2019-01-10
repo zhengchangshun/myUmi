@@ -6,10 +6,12 @@ const FormItem = Form.Item;
 const {Option} = Select;
 const {TextArea} = Input;
 const RadioGroup = Radio.Group;
+const CheckboxGroup = Checkbox.Group
 const {RangePicker} = DatePicker;
 
 /*目前支持的form表单类型*/
 const mapTypeToComponent = {
+    'label': '',
     'input': {
         WrappedComponent: Input,
     },
@@ -17,7 +19,9 @@ const mapTypeToComponent = {
         WrappedComponent: Select,
         defaultProps: {
             allowClear: true
-        }
+        },
+        optionsData: 'selectOptions',
+        SubComponent: Option
     },
     'datepicker': {
         WrappedComponent: DatePicker,
@@ -34,11 +38,24 @@ const mapTypeToComponent = {
     'checkbox': {
         WrappedComponent: Checkbox,
     },
+    'checkboxgroup': {
+        WrappedComponent: CheckboxGroup,
+        optionsData: 'checkboxOptions',
+        SubComponent: Checkbox,
+        style: {
+            marginLeft: '10px'
+        }
+    },
     'textarea': {
         WrappedComponent: TextArea,
     },
     'radiogroup': {
         WrappedComponent: RadioGroup,
+        optionsData: 'radioOptions',
+        SubComponent: Radio,
+        style: {
+            marginLeft: '10px'
+        }
     },
 }
 
@@ -47,36 +64,47 @@ class AddAndEditModal extends React.Component {
         super(props)
     }
 
+    componentValidator = (rule, value, callback) => {
+        return (userValidator) => {
+            this.props[userValidator[0]['validator']](rule, value, callback)
+        }
+    }
+
 
     handleOk = () => {
         const {form, onOk} = this.props;
         const {validateFields} = form;
 
         validateFields((errors, fieldsValue) => {
+            let values = []
             if (errors) {
                 return;
             }
-            let values = {
-                ...fieldsValue
-            };
+            /*剔除key中的"modal_" ，过滤空值*/
+            for (let [k, v] of Object.entries(fieldsValue)) {
+                let key = k.replace('modal_', '')
+                if (v) {
+                    values[key] = v
+                }
+            }
             onOk && onOk(values);
         });
     }
 
     render() {
-        const {modalForm, visible, modalKey, form, onCancel, title, width = 700, okText = '确定', cancelText = '取消'} = this.props;
+        const {modalForm, visible, modalKey, form, onCancel, title, width = 640, okText = '确定', cancelText = '取消'} = this.props;
         const {getFieldDecorator} = form;
 
         const modalOpts = {
-            className: 'tf-modal',
+            className: 'oil-modal',
             title,
             visible,
             width,
             maskClosable: false,
             onCancel,
             footer: <div>
-                <Button onClick={this.handleOk} type="primary">确定</Button>
                 <Button onClick={onCancel}>取消</Button>
+                <Button onClick={this.handleOk} type="primary" style={{marginRight:'50px'}}>确定</Button>
             </div>
         };
         return (
@@ -85,21 +113,22 @@ class AddAndEditModal extends React.Component {
                     <Row gutter={32}>
                         {
                             modalForm.map((item, key) => {
-                                const {
+                                const options = {},
+                                    {
                                         isShow = true,
                                         rules,
                                         initialValue,
                                         type,
                                         label,
-                                        name,
                                         props,
                                         span = 12,
                                         formItemLayout = {labelCol: {span: 8}, wrapperCol: {span: 16}}
                                     } = item,
-                                    options = {},
-                                    {WrappedComponent, defaultProps} = mapTypeToComponent[type.toLowerCase()]
+                                    {WrappedComponent, defaultProps} = mapTypeToComponent[type.toLowerCase()],
+                                    name = 'modal_' + item.name;   //name添加modal字符串，防止跟列表搜索表单有相同id
 
                                 options.rules = rules;
+
                                 if (initialValue) {
                                     options.initialValue = initialValue;
                                 }
@@ -109,60 +138,51 @@ class AddAndEditModal extends React.Component {
                                     return null
                                 }
 
-                                /*select*/
-                                if (type.toLowerCase() === 'select') {
-                                    const selectOptions = item.selectedOptions
+                                if (type.toLowerCase() === 'select' || type.toLowerCase() === 'radiogroup' || type.toLowerCase() === 'checkboxgroup') {
+                                    const {optionsData, SubComponent, style} = mapTypeToComponent[type.toLowerCase()]
+                                    const subOptionsData = item[optionsData]
+                                    const models = item.models;
+                                    const [vauleKey = 'value', labelKey = 'label'] = models || [];
+
                                     return (
                                         <Col span={span} key={key}>
-                                            <FormItem label={label} {...formItemLayout}>
+                                            <FormItem label={label} {...formItemLayout} hasFeedback={type.toLowerCase() === 'select' ? true : false}>
                                                 {getFieldDecorator(name, options)(
                                                     <WrappedComponent  {...defaultProps} {...props}>
                                                         {
-                                                            selectOptions.length > 0 && selectOptions.map((v, i) => {
-                                                                return <Option key={i} value={v.value}>{v.label}</Option>
+                                                            subOptionsData.length > 0 && subOptionsData.map((v, i) => {
+                                                                return <SubComponent key={i} value={v[vauleKey]} style={style}>{v[labelKey]}</SubComponent>
                                                             })
                                                         }
                                                     </WrappedComponent>
                                                 )}
                                                 {
-                                                    item.addonAfter && <span style={{marginLeft: '5px'}}>{item.addonAfter}</span>
+                                                    item.addonAfter && item.addonAfter
                                                 }
                                             </FormItem>
                                         </Col>
                                     );
                                 }
 
-                                /*radioGroup*/
-                                if (type.toLowerCase() === 'radiogroup') {
-                                    const radioOptions = item.radioOptions
-                                    return (
-                                        <Col span={span} key={key}>
-                                            <FormItem label={label} {...formItemLayout}>
-                                                {getFieldDecorator(name, options)(
-                                                    <WrappedComponent  {...defaultProps} {...props}>
-                                                        {
-                                                            radioOptions.length > 0 && radioOptions.map((v, i) => {
-                                                                return <Radio key={i} value={v.value} style={{marginLeft: '10px'}}>{v.label}</Radio>
-                                                            })
-                                                        }
-                                                    </WrappedComponent>
-                                                )}
-                                                {
-                                                    item.addonAfter && <span style={{marginLeft: '5px'}}>{item.addonAfter}</span>
-                                                }
-                                            </FormItem>
-                                        </Col>
-                                    );
+                                /*文本*/
+                                if (type.toLowerCase() === 'label') {
+                                    <Col span={span} key={key}>
+                                        <FormItem label={label} {...formItemLayout}>
+                                            <span>{item.text}</span>
+                                            {
+                                                item.addonAfter && <span style={{marginLeft: '5px'}}>{item.addonAfter}</span>
+                                            }
+                                        </FormItem>
+                                    </Col>
                                 }
-
                                 return (
                                     <Col span={span} key={key}>
-                                        <FormItem label={label} {...formItemLayout} hasFeedback>
+                                        <FormItem label={label} {...formItemLayout} hasFeedback={type.toLowerCase() === 'checkbox' ? false : true}>
                                             {getFieldDecorator(name, options)(
                                                 <WrappedComponent {...defaultProps} {...props}></WrappedComponent>
                                             )}
                                             {
-                                                item.addonAfter && <span style={{marginLeft: '5px'}}>{item.addonAfter}</span>
+                                                item.addonAfter && item.addonAfter
                                             }
                                         </FormItem>
                                     </Col>
@@ -171,7 +191,7 @@ class AddAndEditModal extends React.Component {
                         }
                     </Row>
                 </Form>
-            </Modal>
+            </ Modal>
         )
     }
 }
