@@ -7,8 +7,6 @@ import styles from './index.less'
 
 const SubMenu = Menu.SubMenu;
 
-// let defaultSelectedMenu = {};
-
 class MySider extends React.Component {
     state = {
         openKeys: [],
@@ -50,14 +48,12 @@ class MySider extends React.Component {
             let item = data[i]
             if (item.children && item.children.length) {
                 let selectedItem = this.getDefaultSelectedMenu(item.children, url)
-                if (Object.keys(selectedItem).length) {
+                if (selectedItem && Object.keys(selectedItem).length) {
                     return selectedItem
                 }
             } else {
                 if (item.url === url) {
                     return item
-                } else {
-                    return {}
                 }
             }
         }
@@ -84,13 +80,16 @@ class MySider extends React.Component {
     menuElems = (menuData) => menuData.map((item) => {
         /*存在子菜单*/
         if (item.children && item.children.length > 0) {
-            return <SubMenu key={item.menuId} title={<span><TfIcon type={item.icon}/>{item.menuItemName}</span>}>
+            return <SubMenu key={item.menuId} title={<span><TfIcon type={item.icon} className={styles.menuIcon}/><span>{item.menuItemName}</span></span>}>
                 {this.menuElems(item.children)}
             </SubMenu>;
         } else {
             /*不存在子菜单*/
             return <Menu.Item key={item.menuId}>
-                <div onClick={() => this.onClickItem(item)}><TfIcon type={item.icon}/>{item.menuItemName}</div>
+                <div onClick={() => this.onClickItem(item)}>
+                    <TfIcon type={item.icon} className={styles.menuIcon}/>
+                    <span>{item.menuItemName}</span>
+                </div>
             </Menu.Item>
         }
     });
