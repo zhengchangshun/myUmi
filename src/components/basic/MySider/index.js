@@ -13,33 +13,51 @@ class MySider extends React.Component {
         defaultSelectedKey: ['1'],
     };
 
-    componentWillMount() {
+    componentWillReceiveProps(nextProps) {
+        /*if(this.props.menuList.length !== nextProps.menuList.length){
+
+        }*/
         /*菜单匹配Url路径*/
-        const {history, menuList} = this.props;
+        const {history, menuList} = nextProps;
         let path = history.location.pathname
-        // 查找选中的目录
+        /*构造菜单父子id映射关系*/
+        let menuIdMapping = this.setMenuIdMapping(menuList)
+        /*获取当前选中的菜单项*/
         let defaultSelectedMenu = this.getDefaultSelectedMenu(menuList, path) || {}
+        /*获取当前选中的菜单项 - menuId*/
         let defaultSelectedMenuId = defaultSelectedMenu.menuId || '';
-        let openKeys = this.getDefaultOpenKey(defaultSelectedMenuId)
+        /*获取当前选中的菜单项 - openKey*/
+        let openKeys = this.getDefaultOpenKey(menuIdMapping, defaultSelectedMenuId)
         this.setState({
             defaultSelectedKey: [defaultSelectedMenuId],
-            openKeys
+            openKeys:openKeys.reverse()
         })
     }
 
     /*获取默认展开的菜单的menuId*/
-    getDefaultOpenKey(menuId) {
-        if (menuId.length) {
-            const menuIdList = menuId.split('-').filter(i => i);
-            const newMenuList = menuIdList.map((urlItem, index) => {
-                return `${menuIdList.slice(0, index + 1).join('-')}`;
-            });
-            /*openKey 从根目录到当前层级的父元素*/
-            return newMenuList.slice(0, newMenuList.length - 1)
-        } else {
-            return []
+    getDefaultOpenKey(menuIdMapping, defaultSelectedMenuId) {
+        let openKeys = [];
+        let parentMenuId = menuIdMapping[defaultSelectedMenuId]
+        if (parentMenuId) {
+            openKeys.push(parentMenuId);
+            openKeys.push(...this.getDefaultOpenKey(menuIdMapping, parentMenuId))
         }
+        return openKeys
+    }
 
+    /*构造菜单父子id映射关系*/
+    setMenuIdMapping(data, parentMenuId = '') {
+        let mapping = {}
+        for (let i = 0, len = data.length; i < len; i++) {
+            let item = data[i];
+            let currentMenuId = item.menuId;
+            mapping = Object.assign({}, mapping, {[currentMenuId]: parentMenuId})
+            if (item.children && item.children.length) {
+                let subMapping = this.setMenuIdMapping(item.children, currentMenuId)
+                mapping = Object.assign({}, mapping, subMapping)
+            }
+        }
+        return mapping
     }
 
     /* url链接时，展开菜单*/
@@ -98,7 +116,7 @@ class MySider extends React.Component {
         const {history, menuList} = this.props;
         return (
             <div className={styles.siderWrap}>
-                <Menu mode="inline" defaultSelectedKeys={this.state.defaultSelectedKey} openKeys={this.state.openKeys}
+                <Menu mode="inline" selectedKeys={this.state.defaultSelectedKey} openKeys={this.state.openKeys}
                       onOpenChange={this.onOpenChange}>
                     {this.menuElems(menuList)}
                 </Menu>
