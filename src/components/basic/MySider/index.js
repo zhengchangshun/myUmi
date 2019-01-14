@@ -9,6 +9,7 @@ const SubMenu = Menu.SubMenu;
 
 class MySider extends React.Component {
     state = {
+        menuIdMapping: {}, //子菜单 - 父菜单 menuId 的映射关系
         openKeys: [],
         defaultSelectedKey: ['1'],
     };
@@ -24,25 +25,15 @@ class MySider extends React.Component {
         let menuIdMapping = this.setMenuIdMapping(menuList)
         /*获取当前选中的菜单项*/
         let defaultSelectedMenu = this.getDefaultSelectedMenu(menuList, path) || {}
-        /*获取当前选中的菜单项 - menuId*/
+        /*获取当前选中的菜单项- menuId*/
         let defaultSelectedMenuId = defaultSelectedMenu.menuId || '';
-        /*获取当前选中的菜单项 - openKey*/
-        let openKeys = this.getDefaultOpenKey(menuIdMapping, defaultSelectedMenuId)
+        /*获取当前选中的菜单项的父菜单的menuId的集合- openKey*/
+        let openKeys = this.getParentMenuId(menuIdMapping, defaultSelectedMenuId)
         this.setState({
+            menuIdMapping,
             defaultSelectedKey: [defaultSelectedMenuId],
-            openKeys:openKeys.reverse()
+            openKeys: openKeys.reverse()
         })
-    }
-
-    /*获取默认展开的菜单的menuId*/
-    getDefaultOpenKey(menuIdMapping, defaultSelectedMenuId) {
-        let openKeys = [];
-        let parentMenuId = menuIdMapping[defaultSelectedMenuId]
-        if (parentMenuId) {
-            openKeys.push(parentMenuId);
-            openKeys.push(...this.getDefaultOpenKey(menuIdMapping, parentMenuId))
-        }
-        return openKeys
     }
 
     /*构造菜单父子id映射关系*/
@@ -59,7 +50,17 @@ class MySider extends React.Component {
         }
         return mapping
     }
+    /*获取父菜单menuId的集合*/
+    getParentMenuId(menuIdMapping, key) {
+        let openKeys = [],
+            parentMenuId = menuIdMapping[key];
 
+        if (parentMenuId) {
+            openKeys.push(parentMenuId);
+            openKeys.push(...this.getParentMenuId(menuIdMapping, parentMenuId))
+        }
+        return openKeys
+    }
     /* url链接时，展开菜单*/
     getDefaultSelectedMenu = (data, url) => {
         for (let i = 0, len = data.length; i < len; i++) {
@@ -77,15 +78,13 @@ class MySider extends React.Component {
         }
     }
     /*只展开当前点击的菜单*/
-    onOpenChange = (openKeys) => {
-        const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
-        if (latestOpenKey && latestOpenKey.indexOf(openKeys[0]) !== -1) {
-            this.setState({openKeys});
-        } else {
-            this.setState({
-                openKeys: latestOpenKey ? [latestOpenKey] : [],
-            })
-        }
+    onOpenChange = (openKeysList) => {
+        console.log(openKeysList);
+        let lastOpenKey = openKeysList[openKeysList.length - 1];
+        /*获取当前最后一个展开菜单的父菜单MenuId集合*/
+        let openKeys = this.getParentMenuId(this.state.menuIdMapping, lastOpenKey)
+        openKeys.push(lastOpenKey);
+        this.setState({openKeys});
     }
     /*菜单点击*/
     onClickItem = (item) => {

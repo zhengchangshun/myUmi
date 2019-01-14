@@ -64,13 +64,6 @@ class AddAndEditModal extends React.Component {
         super(props)
     }
 
-    componentValidator = (rule, value, callback) => {
-        return (userValidator) => {
-            this.props[userValidator[0]['validator']](rule, value, callback)
-        }
-    }
-
-
     handleOk = () => {
         const {form, onOk} = this.props;
         const {validateFields} = form;
