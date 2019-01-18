@@ -79,12 +79,13 @@ class MySider extends React.Component {
     }
     /*只展开当前点击的菜单*/
     onOpenChange = (openKeysList) => {
-        console.log(openKeysList);
         let lastOpenKey = openKeysList[openKeysList.length - 1];
         /*获取当前最后一个展开菜单的父菜单MenuId集合*/
         let openKeys = this.getParentMenuId(this.state.menuIdMapping, lastOpenKey)
         openKeys.push(lastOpenKey);
-        this.setState({openKeys});
+        this.setState({
+            openKeys:openKeys.filter(v=>v)
+        });
     }
     /*菜单点击*/
     onClickItem = (item) => {

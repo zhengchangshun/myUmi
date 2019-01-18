@@ -5,27 +5,20 @@ export default [
         menuId: '1',
     },
     {
-        menuItemName: 'Example',
+        menuItemName: '系统管理',
         url: '',
+        icon: '',
         menuId: '2',
         children: [
             {
-                menuItemName: 'Example-1',
-                url: '/example',
+                menuItemName: '用户管理',
+                url: '/systemManage/user',
                 menuId: '2-1',
-            }
-        ]
-    },
-    {
-        menuItemName: '测试',
-        url: '',
-        icon: '',
-        menuId: '3',
-        children: [
+            },
             {
-                menuItemName: '列表',
-                url: '/test/list',
-                menuId: '3-1',
+                menuItemName: '角色管理',
+                url: '/systemManage/role',
+                menuId: '2-2',
             }
         ]
     }

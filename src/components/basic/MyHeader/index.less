@@ -8,6 +8,11 @@
     color: #ffffff;
     padding: 0 20px;
     .left {
+        display: flex;
+        align-items: center;
+        .logo{
+            font-size: 26px;
+        }
         .systemName {
             margin: 0 10px;
             font-size: 16px;
@@ -24,10 +29,20 @@
         .carrierName{
             margin-right: 20px;
         }
+        .userName{
+           margin-right: 20px;
+        }
+        .dropDownIcon{
+            font-size: 8px;
+        }
     }
 }
 
 .dropDownMenu{
+    margin-top: 20px;
+    .dropDownMenuIcon{
+        margin-right: 7px;
+    }
     :global{
         .ant-dropdown-menu-item{
             font-size: 13px;

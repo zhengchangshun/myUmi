@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './index.less'
-import {Avatar, Menu, Dropdown, Icon} from 'antd';
+import { Menu, Dropdown, Icon} from 'antd';
 import router from 'umi/router';
 import {TfIcon} from '../../index'
 
@@ -19,20 +19,20 @@ export default class MyHeader extends React.Component {
     }
 
     render() {
-        const {userInfo={}} = this.props
+        const {userInfo} = this.props
         const {userName, carrierName, userAvatar} = userInfo
 
         const dropDownMenu = (
             <Menu className={styles.dropDownMenu}>
                 <Menu.Item key="0">
                     <div onClick={() => this.redirectTo()}>
-                        <TfIcon type=""/>
+                        <TfIcon type="Yonghufankui" className={styles.dropDownMenuIcon}/>
                         <span>用户反馈</span>
                     </div>
                 </Menu.Item>
                 <Menu.Item key="1">
                     <div onClick={() => this.exit()}>
-                        <TfIcon type=""/>
+                        <TfIcon type="Signout" className={styles.dropDownMenuIcon}/>
                         <span>退出</span>
                     </div>
                 </Menu.Item>
@@ -42,17 +42,17 @@ export default class MyHeader extends React.Component {
         return (
             <div className={styles.headerWrap}>
                 <div className={styles.left}>
-                    <TfIcon type=""/>
-                    <span className={styles.systemName}>企业管理后台</span>
+                    <TfIcon type="logo" className={styles.logo}/>
+                    <span className={styles.systemName}>传化油链企业管理后台</span>
                 </div>
                 <div className={styles.right}>
                     <span>欢迎您</span>
-                    <Avatar className={styles.avatar} src={userAvatar}/>
+                    <TfIcon type="Avatar" className={styles.avatar}/>
                     <span className={styles.carrierName}>{carrierName}</span>
                     <Dropdown overlay={dropDownMenu} trigger={['click']} placement="bottomRight">
                         <span>
                             <span className={styles.userName}>{userName}</span>
-                            <Icon type="down"/>
+                            <TfIcon className={styles.dropDownIcon} type="Drop-down"/>
                         </span>
                     </Dropdown>
                 </div>
