@@ -4,9 +4,12 @@ import GenerateForm from '../GenerateForm'
 
 export default class GenerateModal extends React.Component {
     handleOk = () => {
-        this.generateForm.verify(values => {
+        this.generateForm.verify((error, values) => {
+            if (error) {
+                return
+            }
             this.props.onOk && this.props.onOk(values);
-        });
+        })
     }
     /*对外暴露form的实例*/
     generateFormInstance = () => {

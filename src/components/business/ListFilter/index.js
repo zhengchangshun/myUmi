@@ -7,9 +7,12 @@ import styles from './index.less'
 export default class ListFilter extends React.Component {
     /*搜索*/
     onSearch = () => {
-        this.generateForm.verify(values => {
+        this.generateForm.verify((error, values) => {
+            if (error) {
+                return
+            }
             this.props.onSearch && this.props.onSearch(values);
-        });
+        })
     }
 
     /*重置*/

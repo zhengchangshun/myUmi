@@ -1,6 +1,6 @@
 import React from 'react'
 import {Form, Select, DatePicker, Row, Col, Input, Checkbox, Radio} from 'antd';
-import {TfOilAddr} from '../../../components'
+import {TfOilAddr, CertificateUpload} from '../../../components'
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import styles from './index.less'
 
@@ -19,6 +19,9 @@ const mapTypeToComponent = {
     },
     'addr': {
         WrappedComponent: TfOilAddr,
+    },
+    'upload': {
+        WrappedComponent: CertificateUpload,
     },
     'select': {
         WrappedComponent: Select,
@@ -70,9 +73,7 @@ class GenerateForm extends React.Component {
         let {prefix = 'formData'} = this.props
         this.props.form.validateFields((errors, fieldsValue) => {
             let values = []
-            if (errors) {
-                return;
-            }
+
             /*剔除key中的"formData_" ，过滤空值*/
             for (let [k, v] of Object.entries(fieldsValue)) {
                 let key = k.replace(`${prefix}_`, '')
@@ -80,7 +81,7 @@ class GenerateForm extends React.Component {
                     values[key] = v
                 }
             }
-            callback && callback(values);
+            callback && callback(errors, values);
         });
     };
     //提供给父组件用的 重置表单方法
@@ -95,11 +96,11 @@ class GenerateForm extends React.Component {
 
     render() {
         /*formSet代表form表单的配置*/
-        const {formSet, form, gutter = 32, prefix = 'formData'} = this.props;
+        const {className, formSet, form, gutter = 32, prefix = 'formData'} = this.props;
         const {getFieldDecorator} = form;
 
         return (
-            <Form className={styles.generateFormWrap}>
+            <Form className={`${styles.generateFormWrap} ${className}`}>
                 <Row gutter={gutter}>
                     {
                         formSet.map((item, key) => {
