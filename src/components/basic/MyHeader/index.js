@@ -43,7 +43,7 @@ export default class MyHeader extends React.Component {
             <div className={styles.headerWrap}>
                 <div className={styles.left}>
                     <TfIcon type="logo" className={styles.logo}/>
-                    <span className={styles.systemName}>传化油链企业管理后台</span>
+                    <span className={styles.systemName}>企业管理后台</span>
                 </div>
                 <div className={styles.right}>
                     <span>欢迎您</span>
