@@ -72,7 +72,7 @@ class GenerateForm extends React.Component {
     verify = callback => {
         let {prefix = 'formData'} = this.props
         this.props.form.validateFields((errors, fieldsValue) => {
-            let values = []
+            let values = {}
 
             /*剔除key中的"formData_" ，过滤空值*/
             for (let [k, v] of Object.entries(fieldsValue)) {
@@ -92,6 +92,21 @@ class GenerateForm extends React.Component {
     getFieldValue = (key) => {
         let {prefix} = this.props
         return this.props.form.getFieldValue(`${prefix}_${key}`);
+    }
+    //提供给父组件用的 获取表单所有值方法
+    getFieldValues = () => {
+        let values = {},
+            {prefix = 'formData'} = this.props,
+            fieldsValue = this.props.form.getFieldsValue();
+
+        /*剔除key中的"formData_" ，过滤空值*/
+        for (let [k, v] of Object.entries(fieldsValue)) {
+            let key = k.replace(`${prefix}_`, '')
+            if (v) {
+                values[key] = v
+            }
+        }
+        return values
     }
 
     render() {
