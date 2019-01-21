@@ -1,5 +1,6 @@
-import {User_Role_Status} from '../../../lib/enum'
-import {patternPhone} from '../../../lib/verify'
+import {User_Role_Status} from '../../../../lib/enum'
+import {patternPhone} from '../../../../lib/verify'
+import Link from 'umi/link';
 import {Popconfirm} from 'antd'
 
 /*搜索条件*/
@@ -48,6 +49,9 @@ export function tableColumns(_self) {
         {
             title: '用户名',
             dataIndex: 'partyName',
+            render: (partyName, record) => {
+                return <Link to={{pathname: '/systemManage/user/detail', query: {partyName}}}>{partyName}</Link>
+            }
         },
         {
             title: '姓名',

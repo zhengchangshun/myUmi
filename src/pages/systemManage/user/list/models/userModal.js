@@ -1,4 +1,4 @@
-import {addUser, editUser} from '../../../../services/systemManage'
+import {addUser, editUser} from '../../../../../services/systemManage'
 
 const initState = () => ({
     partyName: '',

@@ -28,7 +28,6 @@ class BasicLayout extends React.Component {
     render() {
         const {global, location, children, dispatch} = this.props
         const {userInfo, menuList} = global
-        debugger
         const headerProps = {
             userInfo,
             onExit: () => {

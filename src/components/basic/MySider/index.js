@@ -3,6 +3,7 @@ import {Menu, Icon} from 'antd';
 import {TfIcon} from '../../index';
 import withRouter from 'umi/withRouter'
 import router from 'umi/router'
+import {menuMapping} from '../../../lib/menuMapping'
 import styles from './index.less'
 
 const SubMenu = Menu.SubMenu;
@@ -15,25 +16,29 @@ class MySider extends React.Component {
     };
 
     componentWillReceiveProps(nextProps) {
-        /*if(this.props.menuList.length !== nextProps.menuList.length){
+        if (nextProps.menuList.length > 0) {
+            /*菜单匹配Url路径*/
+            const {history, menuList} = nextProps;
+            let path = this.getPathNameMapping(history.location.pathname)
+            /*构造菜单父子id映射关系*/
+            let menuIdMapping = this.setMenuIdMapping(menuList)
+            /*获取当前选中的菜单项*/
+            let defaultSelectedMenu = this.getDefaultSelectedMenu(menuList, path) || {}
+            /*获取当前选中的菜单项- menuId*/
+            let defaultSelectedMenuId = defaultSelectedMenu.menuId || '';
+            /*获取当前选中的菜单项的父菜单的menuId的集合- openKey*/
+            let openKeys = this.getParentMenuId(menuIdMapping, defaultSelectedMenuId)
+            this.setState({
+                menuIdMapping,
+                defaultSelectedKey: [defaultSelectedMenuId],
+                openKeys: openKeys.reverse()
+            })
+        }
+    }
 
-        }*/
-        /*菜单匹配Url路径*/
-        const {history, menuList} = nextProps;
-        let path = history.location.pathname
-        /*构造菜单父子id映射关系*/
-        let menuIdMapping = this.setMenuIdMapping(menuList)
-        /*获取当前选中的菜单项*/
-        let defaultSelectedMenu = this.getDefaultSelectedMenu(menuList, path) || {}
-        /*获取当前选中的菜单项- menuId*/
-        let defaultSelectedMenuId = defaultSelectedMenu.menuId || '';
-        /*获取当前选中的菜单项的父菜单的menuId的集合- openKey*/
-        let openKeys = this.getParentMenuId(menuIdMapping, defaultSelectedMenuId)
-        this.setState({
-            menuIdMapping,
-            defaultSelectedKey: [defaultSelectedMenuId],
-            openKeys: openKeys.reverse()
-        })
+    getPathNameMapping = (pathname) => {
+        let mappingValue = menuMapping[pathname]
+        return mappingValue ? mappingValue : pathname
     }
 
     /*构造菜单父子id映射关系*/
@@ -50,6 +55,7 @@ class MySider extends React.Component {
         }
         return mapping
     }
+
     /*获取父菜单menuId的集合*/
     getParentMenuId(menuIdMapping, key) {
         let openKeys = [],
@@ -61,6 +67,7 @@ class MySider extends React.Component {
         }
         return openKeys
     }
+
     /* url链接时，展开菜单*/
     getDefaultSelectedMenu = (data, url) => {
         for (let i = 0, len = data.length; i < len; i++) {
@@ -84,7 +91,7 @@ class MySider extends React.Component {
         let openKeys = this.getParentMenuId(this.state.menuIdMapping, lastOpenKey)
         openKeys.push(lastOpenKey);
         this.setState({
-            openKeys:openKeys.filter(v=>v)
+            openKeys: openKeys.filter(v => v)
         });
     }
     /*菜单点击*/

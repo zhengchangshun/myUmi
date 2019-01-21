@@ -1,8 +1,8 @@
 import React from 'react'
 import {connect} from 'dva';
 import {Button, Table, Modal} from 'antd';
-import {ListFilter, SubHeader, GenerateModal} from '../../../components/index'
-import {Global_Pagination} from '../../../lib/enum'
+import {ListFilter, SubHeader, GenerateModal} from '../../../../components/index'
+import {Global_Pagination} from '../../../../lib/enum'
 import {listFiltles, tableColumns, modalSet} from './map'
 import styles from './index.less'
 

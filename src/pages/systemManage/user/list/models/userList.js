@@ -1,4 +1,4 @@
-import {queryRoleList, queryBranchCompanyList, queryUserList, deleteUser,resetPwd} from '../../../../services/systemManage'
+import {queryRoleList, queryBranchCompanyList, queryUserList, deleteUser,resetPwd} from '../../../../../services/systemManage'
 
 export default {
     namespace: 'userList',
@@ -14,16 +14,17 @@ export default {
     subscriptions: {
         setup({dispatch, history}) {
             return history.listen(({pathname, query}) => {
-                if (pathname === '/systemManage/user') {
+                if (pathname === '/systemManage/user/list') {
+                    dispatch({
+                        type: 'queryUserList'
+                    });
                     dispatch({
                         type: 'queryBranchCompanyList'
                     });
                     dispatch({
                         type: 'queryRoleList'
                     });
-                    dispatch({
-                        type: 'queryUserList'
-                    });
+
                 }
             })
         }
@@ -52,10 +53,10 @@ export default {
             let data = {}
             data.data = [
                 {
+                    "partyName": '用户1',
                     "companyName": '1',
                     "gmtCreate":'1',
                     "name": '1',
-                    "partyName": '1',
                     "phone": '1',
                     "remark": '1',
                     "role": [{

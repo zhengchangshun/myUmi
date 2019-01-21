@@ -12,7 +12,7 @@ export default [
         children: [
             {
                 menuItemName: '用户管理',
-                url: '/systemManage/user',
+                url: '/systemManage/user/list',
                 menuId: '2-1',
             },
             {
