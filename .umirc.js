@@ -10,6 +10,7 @@ export default {
             title: 'myUmi',
             routes: {
                 exclude: [
+                    /map\.(j|t)sx?$/,
                     /model\.(j|t)sx?$/,
                     /service\.(j|t)sx?$/,
                     /models\//,
