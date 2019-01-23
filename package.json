@@ -30,6 +30,7 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
+    "antd": "^3.12.1",
     "fetch-jsonp": "^1.1.3",
     "query-string": "^6.2.0"
   }

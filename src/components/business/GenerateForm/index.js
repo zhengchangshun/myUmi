@@ -1,12 +1,12 @@
 import React from 'react'
 import {Form, Select, DatePicker, Row, Col, Input, Checkbox, Radio} from 'antd';
-import {TfOilAddr, CertificateUpload} from '../../../components'
+import { CertificateUpload} from '../../../components'
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import styles from './index.less'
 
 const FormItem = Form.Item;
 const {Option} = Select;
-const {TextArea} = Input;
+const {TextArea, Password} = Input;
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group
 const {RangePicker} = DatePicker;
@@ -17,8 +17,8 @@ const mapTypeToComponent = {
     'input': {
         WrappedComponent: Input,
     },
-    'addr': {
-        WrappedComponent: TfOilAddr,
+    'password': {
+        WrappedComponent: Password,
     },
     'upload': {
         WrappedComponent: CertificateUpload,

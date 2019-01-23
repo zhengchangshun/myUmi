@@ -161,12 +161,9 @@ export function modalSet(_self) {
             checkboxOptions: _self.props.userList.roleList
         },
         {
-            type: 'input',
+            type: 'Password',
             name: 'password',
             label: '密码',
-            props: {
-                type: 'password'
-            },
             initialValue: _self.props.userModal.password,
             rules: [
                 {required: true, message: '请输入密码'},
@@ -174,12 +171,9 @@ export function modalSet(_self) {
             ]
         },
         {
-            type: 'input',
+            type: 'Password',
             name: 'confirmPassword',
             label: '确认密码',
-            props: {
-                type: 'password'
-            },
             initialValue: _self.props.userModal.confirmPassword,
             rules: [
                 {validator: _self.comfirmPassword}
