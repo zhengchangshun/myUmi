@@ -90,7 +90,7 @@ class GenerateForm extends React.Component {
     }
     //提供给父组件用的 获取表单元素值方法
     getFieldValue = (key) => {
-        let {prefix} = this.props
+        let {prefix = 'formData'} = this.props
         return this.props.form.getFieldValue(`${prefix}_${key}`);
     }
     //提供给父组件用的 获取表单所有值方法
