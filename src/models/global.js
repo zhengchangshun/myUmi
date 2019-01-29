@@ -10,7 +10,7 @@ export default {
     state: {
         userInfo: {
             userName: '张三',
-            carrierName: '飓风物飓风物流飓风物流飓风物流飓风物流飓风物流流',
+            carrierName: '飓风物流',
             userAvatar: 'https://cdn-img.easyicon.net/png/10686/1068661.gif',
         },
         menuList: menuList,
