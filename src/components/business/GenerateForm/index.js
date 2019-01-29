@@ -134,7 +134,7 @@ class GenerateForm extends React.Component {
                                 name = `${prefix}_${item.name}`;   //name添加`${prefix}_`字符串，防止跟列表搜索表单、弹窗表单有id重复警告
 
                             options.rules = rules;
-                            if (initialValue) {
+                            if ('initialValue' in item) {
                                 options.initialValue = initialValue;
                             }
 
