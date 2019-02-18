@@ -10,17 +10,18 @@ const {Header, Sider, Content} = Layout;
 /*页面布局，可以理解为一级路由*/
 export default class BasicLayout extends React.Component {
 
-    componentWillMount() {
-        const {dispatch} = this.props;
-       /* /!*查询用户信息*!/
-        dispatch({
-            type: 'global/queryUserInfo',
-        })
 
-        /!*查询菜单数据*!/
-        dispatch({
-            type: 'global/queryMenuList'
-        });*/
+    componentDidMount() {
+        const {dispatch} = this.props;
+         /*查询用户信息*/
+		 dispatch({
+			 type: 'global/queryUserInfo',
+		 })
+
+		 /*查询菜单数据*/
+		 dispatch({
+			 type: 'global/queryMenuList'
+		 });
     }
 
     render() {

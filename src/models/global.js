@@ -13,7 +13,7 @@ export default {
             carrierName: '飓风物流',
             userAvatar: 'https://cdn-img.easyicon.net/png/10686/1068661.gif',
         },
-        menuList: menuList,
+        menuList: [],
     },
     reducers: {
         updateState(state, {payload}) {
@@ -23,23 +23,29 @@ export default {
     effects: {
         /*获取菜单*/
         * queryMenuList(action, {call, put}) {
-            const data = yield call(queryMenuList, {});
+           /* const data = yield call(queryMenuList, {});
             yield put({
                 type: 'updateState',
                 payload: {
-                    menuList: data.data || {}
+                    menuList: data.data || []
                 }
-            });
+            });*/
+            yield put({
+                type: 'updateState',
+                payload: {
+                    menuList: menuList || []
+                }
+            })
         },
         /*获取消息数量*/
         * queryUserInfo(action, {call, put}) {
             const data = yield call(queryUserInfo);
-            yield put({
+            /*yield put({
                 type: 'updateState',
                 payload: {
                     userInfo: data.data || {}
                 }
-            });
+            });*/
         },
         /*退出*/
         * exit(action, {call, put}) {

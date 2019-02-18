@@ -8,6 +8,10 @@ import styles from './index.less'
 
 const SubMenu = Menu.SubMenu;
 
+/**
+ * 备注 : 当menuId值是Number类型，由于Sider组件中 openKeys，defaultSelectedKey 要求必须是字符串，会出现
+ * 菜单无法正常展开和选中，因此在setState时，转换为字符串
+ */
 class MySider extends React.Component {
     state = {
         menuIdMapping: {}, //子菜单 - 父菜单 menuId 的映射关系
@@ -30,8 +34,8 @@ class MySider extends React.Component {
             let openKeys = this.getParentMenuId(menuIdMapping, defaultSelectedMenuId)
             this.setState({
                 menuIdMapping,
-                defaultSelectedKey: [defaultSelectedMenuId],
-                openKeys: openKeys.reverse()
+                defaultSelectedKey: [defaultSelectedMenuId + ''],
+                openKeys: openKeys.reverse().map(v => v + '')
             })
         }
     }
@@ -91,7 +95,7 @@ class MySider extends React.Component {
         let openKeys = this.getParentMenuId(this.state.menuIdMapping, lastOpenKey)
         openKeys.push(lastOpenKey);
         this.setState({
-            openKeys: openKeys.filter(v => v)
+            openKeys: openKeys.filter(v => v).map(v => v + '')
         });
     }
     /*菜单点击*/

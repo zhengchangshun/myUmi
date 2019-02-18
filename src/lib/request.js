@@ -1,4 +1,5 @@
 import fetch from 'dva/fetch';
+import fetchJsonp from 'fetch-jsonp';
 import {message} from 'antd';
 import {parseJSON, stitchUrlParam, queryString} from './utils'
 
@@ -94,4 +95,16 @@ export function requestPost(url, params = {}, contentType = 'form') {
 /*post请求,设置content-Type:json */
 export function requestPostJson(url, params = {}) {
     return requestPost(url, params, 'json')
+}
+
+/**
+ * @param url:请求url
+ * @param params：请求参数
+ * @returns 返回Promise对象
+ */
+export function requestJsonp(url, params) {
+    url = stitchUrlParam(url, queryString(params));
+    return fetchJsonp(url)
+        .then(parseJSON)
+        .then((data) => data);
 }
