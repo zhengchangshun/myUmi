@@ -1,6 +1,6 @@
 import React from 'react'
-import {Form, Select, DatePicker, Row, Col, Input, Checkbox, Radio} from 'antd';
-import { CertificateUpload} from '../../../components'
+import {Form, Select, DatePicker, Row, Col, Input, InputNumber, Checkbox, Radio} from 'antd';
+import {TfOilAddr, CertificateUpload, NumRange} from '../../../components'
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import styles from './index.less'
 
@@ -17,8 +17,17 @@ const mapTypeToComponent = {
     'input': {
         WrappedComponent: Input,
     },
+    'inputnumber': {
+        WrappedComponent: InputNumber,
+    },
     'password': {
         WrappedComponent: Password,
+    },
+    'numrange': {
+        WrappedComponent: NumRange,
+    },
+    'addr': {
+        WrappedComponent: TfOilAddr,
     },
     'upload': {
         WrappedComponent: CertificateUpload,
@@ -70,48 +79,42 @@ const mapTypeToComponent = {
 class GenerateForm extends React.Component {
     //提供给父组件用的校验方法
     verify = callback => {
-        let {prefix = 'formData'} = this.props
         this.props.form.validateFields((errors, fieldsValue) => {
             let values = {}
 
             /*剔除key中的"formData_" ，过滤空值*/
             for (let [k, v] of Object.entries(fieldsValue)) {
-                let key = k.replace(`${prefix}_`, '')
                 if (v) {
-                    values[key] = v
+                    values[k] = v
                 }
             }
             callback && callback(errors, values);
         });
     };
-    //提供给父组件用的 重置表单方法
     resetFields = () => {
         return this.props.form.resetFields();
     }
-    //提供给父组件用的 获取表单元素值方法
     getFieldValue = (key) => {
-        let {prefix = 'formData'} = this.props
-        return this.props.form.getFieldValue(`${prefix}_${key}`);
+        return this.props.form.getFieldValue(key);
     }
-    //提供给父组件用的 获取表单所有值方法
     getFieldValues = () => {
-        let values = {},
-            {prefix = 'formData'} = this.props,
-            fieldsValue = this.props.form.getFieldsValue();
-
-        /*剔除key中的"formData_" ，过滤空值*/
-        for (let [k, v] of Object.entries(fieldsValue)) {
-            let key = k.replace(`${prefix}_`, '')
-            if (v) {
-                values[key] = v
-            }
-        }
-        return values
+        return this.props.form.getFieldsValue()
     }
+    setFields = () => {
+        return this.props.form.setFields()
+    }
+    setFieldsValue = () => {
+        return this.props.form.setFieldsValue()
+    }
+    /*form 实例*/
+    getForm = () => {
+        return this.props.form
+    }
+
 
     render() {
         /*formSet代表form表单的配置*/
-        const {className, formSet, form, gutter = 32, prefix = 'formData'} = this.props;
+        const {className, formSet, form, gutter = 32} = this.props;
         const {getFieldDecorator} = form;
 
         return (
@@ -127,11 +130,11 @@ class GenerateForm extends React.Component {
                                     type,
                                     label,
                                     props,
+                                    name,
                                     span = 8,
                                     formItemLayout = {labelCol: {span: 8}, wrapperCol: {span: 16}}
                                 } = item,
-                                {WrappedComponent, defaultProps} = mapTypeToComponent[type.toLowerCase()],
-                                name = `${prefix}_${item.name}`;   //name添加`${prefix}_`字符串，防止跟列表搜索表单、弹窗表单有id重复警告
+                                {WrappedComponent, defaultProps} = mapTypeToComponent[type.toLowerCase()];
 
                             options.rules = rules;
                             if ('initialValue' in item) {
@@ -199,6 +202,20 @@ class GenerateForm extends React.Component {
                 </Row>
             </Form>
         )
+    }
+
+    componentDidMount() {
+        this.props.formSet.forEach(item => {
+            const {name, initialValue, errorMessage} = item
+            if (errorMessage) {
+                this.props.form.setFields({
+                    [name]: {
+                        value: initialValue,
+                        errors: [new Error(errorMessage)],
+                    },
+                });
+            }
+        })
     }
 }
 

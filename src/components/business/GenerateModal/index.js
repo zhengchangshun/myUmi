@@ -17,7 +17,7 @@ export default class GenerateModal extends React.Component {
     }
 
     render() {
-        const {modalForm, visible, modalKey, onCancel, title, width = 640, okText = '确定', cancelText = '取消'} = this.props;
+        const {modalForm, visible, modalKey, onCancel, title, width = 640, hasOkBtn = true,okText = '确定', cancelText = '取消'} = this.props;
         const modalOpts = {
             className: 'oil-modal',
             title,
@@ -27,7 +27,7 @@ export default class GenerateModal extends React.Component {
             onCancel,
             footer: <div>
                 <Button onClick={onCancel}>{cancelText}</Button>
-                <Button onClick={this.handleOk} type="primary" style={{marginRight: '50px'}}>{okText}</Button>
+                {hasOkBtn && <Button onClick={this.handleOk} type="primary" style={{marginRight: '50px'}}>{okText}</Button>}
             </div>
         };
 
@@ -40,7 +40,7 @@ export default class GenerateModal extends React.Component {
 
         return (
             <Modal {...modalOpts} key={modalKey}>
-                <GenerateForm formSet={modalForm} prefix="modal" wrappedComponentRef={el => (this.generateForm = el)}/>
+                <GenerateForm formSet={modalForm}  wrappedComponentRef={el => (this.generateForm = el)}/>
             </ Modal>
         )
     }

@@ -42,7 +42,7 @@ export default class ListFilter extends React.Component {
         return (
             <div>
                 <div className={styles.listFilterWrap}>
-                    <GenerateForm formSet={filters} prefix="filter" wrappedComponentRef={el => (this.generateForm = el)}/>
+                    <GenerateForm formSet={filters} wrappedComponentRef={el => (this.generateForm = el)}/>
                     <div className={styles.btnGroup}>
                         <Button type="primary" onClick={this.onSearch}>{searchBtnText}</Button>
                         <Button type="default" onClick={this.onReset}>{resetBtnText}</Button>
