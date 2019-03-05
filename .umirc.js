@@ -7,7 +7,7 @@ export default {
             antd: true,
             dva: true,
             dynamicImport: true,
-            title: 'myUmi',
+            title: '企业后台管理',
             routes: {
                 exclude: [
                     /map\.(j|t)sx?$/,

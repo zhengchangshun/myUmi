@@ -4,15 +4,16 @@
  */
 import {queryMenuList, queryUserInfo, exit} from '../services/global';
 import menuList from '../lib/menuList'
+const userInfo = {
+    userName: '张三',
+    carrierName: '飓风物流',
+    userAvatar: 'https://cdn-img.easyicon.net/png/10686/1068661.gif',
+}
 
 export default {
     namespace: 'global',
     state: {
-        userInfo: {
-            userName: '张三',
-            carrierName: '飓风物流',
-            userAvatar: 'https://cdn-img.easyicon.net/png/10686/1068661.gif',
-        },
+        userInfo: {},
         menuList: [],
     },
     reducers: {
@@ -37,15 +38,15 @@ export default {
                 }
             })
         },
-        /*获取消息数量*/
+        /*获取用户信息*/
         * queryUserInfo(action, {call, put}) {
-            const data = yield call(queryUserInfo);
-            /*yield put({
+            // const data = yield call(queryUserInfo);
+            yield put({
                 type: 'updateState',
                 payload: {
-                    userInfo: data.data || {}
+                    userInfo: userInfo || {}
                 }
-            });*/
+            });
         },
         /*退出*/
         * exit(action, {call, put}) {

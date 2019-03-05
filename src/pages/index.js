@@ -1,15 +1,12 @@
-import React from 'react'
+import React from 'react';
 import {connect} from 'dva';
 
 function Index(props) {
     return (
         <div>
-            <h2>this is index page</h2>
-            <h3>
-                {props.global.text}
-            </h3>
+            <p>欢迎来到企业管理后台</p>
         </div>
-    )
+    );
 }
 
-export default connect(({global}) => ({global}))(Index)
+export default connect(({global}) => ({global}))(Index);
