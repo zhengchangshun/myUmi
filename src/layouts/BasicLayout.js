@@ -3,7 +3,7 @@ import React from 'react';
 import {LocaleProvider, Layout} from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import router from 'umi/router';
-import {MyHeader, MySider, Authorized} from '../components';
+import {MyHeader, MySider} from '../components';
 
 const {Header, Sider, Content} = Layout;
 
@@ -13,15 +13,15 @@ export default class BasicLayout extends React.Component {
 
     componentDidMount() {
         const {dispatch} = this.props;
-         /*查询用户信息*/
-		 dispatch({
-			 type: 'global/queryUserInfo',
-		 })
+        /*查询用户信息*/
+        dispatch({
+            type: 'global/queryUserInfo',
+        })
 
-		 /*查询菜单数据*/
-		 dispatch({
-			 type: 'global/queryMenuList'
-		 });
+        /*查询菜单数据*/
+        dispatch({
+            type: 'global/queryMenuList'
+        });
     }
 
     render() {
@@ -51,22 +51,20 @@ export default class BasicLayout extends React.Component {
 
         return (
             <LocaleProvider locale={zhCN}>
-                <Authorized {...authProps}>
-                    <Layout className={styles.normal}>
-                        <Header>
-                            <MyHeader {...headerProps} />
-                        </Header>
-                        <Layout>
-                            <Sider width="170">
-                                <MySider {...siderProps} />
-                            </Sider>
-                            <Content className={styles.contentWrap}>
-                                <div className={styles.content}>{children}</div>
-                                <MyFooter/>
-                            </Content>
-                        </Layout>
+                <Layout className={styles.normal}>
+                    <Header>
+                        <MyHeader {...headerProps} />
+                    </Header>
+                    <Layout>
+                        <Sider width="170">
+                            <MySider {...siderProps} />
+                        </Sider>
+                        <Content className={styles.contentWrap}>
+                            <div className={styles.content}>{children}</div>
+                            <MyFooter/>
+                        </Content>
                     </Layout>
-                </Authorized>
+                </Layout>
             </LocaleProvider>
         );
     }
