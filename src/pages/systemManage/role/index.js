@@ -182,8 +182,10 @@ class Role extends React.Component {
                 <SubHeader title="角色管理">
                     <Button type="primary" onClick={this.createHandel}>创建用户</Button>
                 </SubHeader>
-                <ListFilter {...listFilterProps}/>
-                <Table columns={columns} dataSource={roleList} pagination={pagination} rowKey={record => record.roleName}/>
+                <div className="padding20">
+                    <ListFilter {...listFilterProps}/>
+                    <Table columns={columns} dataSource={roleList} pagination={pagination} rowKey={record => record.roleName}/>
+                </div>
                 <GenerateModal {...modalProps}/>
                 {authModalVisible && <AuthModal {...authModalProps}/>}
             </div>

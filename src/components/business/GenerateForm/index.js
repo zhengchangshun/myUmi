@@ -1,6 +1,6 @@
 import React from 'react'
 import {Form, Select, DatePicker, Row, Col, Input, InputNumber, Checkbox, Radio} from 'antd';
-import {TfOilAddr, CertificateUpload, NumRange} from '../../../components'
+import { CertificateUpload, NumRange} from '../../../components'
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import styles from './index.less'
 
@@ -25,9 +25,6 @@ const mapTypeToComponent = {
     },
     'numrange': {
         WrappedComponent: NumRange,
-    },
-    'addr': {
-        WrappedComponent: TfOilAddr,
     },
     'upload': {
         WrappedComponent: CertificateUpload,
@@ -100,11 +97,11 @@ class GenerateForm extends React.Component {
     getFieldValues = () => {
         return this.props.form.getFieldsValue()
     }
-    setFields = () => {
-        return this.props.form.setFields()
+    setFields = (obj) => {
+        return this.props.form.setFields(obj)
     }
-    setFieldsValue = () => {
-        return this.props.form.setFieldsValue()
+    setFieldsValue = (obj) => {
+        return this.props.form.setFieldsValue(obj)
     }
     /*form 实例*/
     getForm = () => {
@@ -122,21 +119,25 @@ class GenerateForm extends React.Component {
                 <Row gutter={gutter}>
                     {
                         formSet.map((item, key) => {
-                            const options = {},
-                                {
+                            const {
                                     isShow = true,
                                     rules,
                                     initialValue,
+                                    validate = [],
                                     type,
                                     label,
+                                    colon = true,
                                     props,
                                     name,
                                     span = 8,
                                     formItemLayout = {labelCol: {span: 8}, wrapperCol: {span: 16}}
                                 } = item,
-                                {WrappedComponent, defaultProps} = mapTypeToComponent[type.toLowerCase()];
+                                {WrappedComponent, defaultProps} = mapTypeToComponent[type.toLowerCase()],
 
-                            options.rules = rules;
+                                options = {
+                                    rules,
+                                    validate
+                                };
                             if ('initialValue' in item) {
                                 options.initialValue = initialValue;
                             }
@@ -154,7 +155,7 @@ class GenerateForm extends React.Component {
 
                                 return (
                                     <Col span={span} key={key}>
-                                        <FormItem label={label} {...formItemLayout} >
+                                        <FormItem label={label} colon={colon} {...formItemLayout}  >
                                             {getFieldDecorator(name, options)(
                                                 <WrappedComponent  {...defaultProps} {...props}>
                                                     {
@@ -175,7 +176,7 @@ class GenerateForm extends React.Component {
                             if (type.toLowerCase() === 'label') {
                                 return (
                                     <Col span={span} key={key}>
-                                        <FormItem label={label} {...formItemLayout}>
+                                        <FormItem label={label} colon={colon} {...formItemLayout}>
                                             <span>{initialValue}</span>
                                             {
                                                 item.addonAfter && <span style={{marginLeft: '5px'}}>{item.addonAfter}</span>
@@ -187,7 +188,7 @@ class GenerateForm extends React.Component {
 
                             return (
                                 <Col span={span} key={key}>
-                                    <FormItem label={label} {...formItemLayout} >
+                                    <FormItem label={label} colon={colon} {...formItemLayout} >
                                         {getFieldDecorator(name, options)(
                                             <WrappedComponent {...defaultProps} {...props} form={form}></WrappedComponent>
                                         )}
@@ -202,20 +203,6 @@ class GenerateForm extends React.Component {
                 </Row>
             </Form>
         )
-    }
-
-    componentDidMount() {
-        this.props.formSet.forEach(item => {
-            const {name, initialValue, errorMessage} = item
-            if (errorMessage) {
-                this.props.form.setFields({
-                    [name]: {
-                        value: initialValue,
-                        errors: [new Error(errorMessage)],
-                    },
-                });
-            }
-        })
     }
 }
 

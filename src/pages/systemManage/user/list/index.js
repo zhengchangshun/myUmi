@@ -175,8 +175,10 @@ class User extends React.Component {
                     <Button type="primary" onClick={this.createHandel} style={{marginRight: '18px'}}>创建用户</Button>
                     <Button type="primary" onClick={this.resetPwdHandel}>重置密码</Button>
                 </SubHeader>
-                <ListFilter {...listFilterProps}/>
-                <Table columns={columns} dataSource={userTableList} pagination={pagination} rowKey={record => record.partyName}/>
+                <div className="padding20">
+                    <ListFilter {...listFilterProps}/>
+                    <Table columns={columns} dataSource={userTableList} pagination={pagination} rowKey={record => record.partyName}/>
+                </div>
                 <GenerateModal {...modalProps} ref={el => this.generateModal = el}/>
             </div>
         )
