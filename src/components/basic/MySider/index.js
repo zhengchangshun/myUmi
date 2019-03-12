@@ -109,14 +109,14 @@ class MySider extends React.Component {
     menuElems = (menuData) => menuData.map((item) => {
         /*存在子菜单*/
         if (item.children && item.children.length > 0) {
-            return <SubMenu key={item.menuId} title={<span><TfIcon type={item.icon} className={styles.menuIcon}/><span>{item.menuItemName}</span></span>}>
+            return <SubMenu key={item.menuId} title={<span>{item.icon && <TfIcon type={item.icon} className={styles.menuIcon}/>}<span>{item.menuItemName}</span></span>}>
                 {this.menuElems(item.children)}
             </SubMenu>;
         } else {
             /*不存在子菜单*/
             return <Menu.Item key={item.menuId}>
                 <div onClick={() => this.onClickItem(item)}>
-                    <TfIcon type={item.icon} className={styles.menuIcon}/>
+                    {item.icon && <TfIcon type={item.icon} className={styles.menuIcon}/>}
                     <span>{item.menuItemName}</span>
                 </div>
             </Menu.Item>
