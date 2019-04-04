@@ -4,31 +4,36 @@ import GenerateForm from '../GenerateForm'
 import styles from './index.less'
 
 export default class GenerateModal extends React.Component {
-    handleOk = () => {
-        this.generateForm.verify((error, values) => {
+    /*确定*/
+    handelOk = () => {
+        this.generateModal.verify((error, values) => {
             if (error) {
                 return
             }
             this.props.onOk && this.props.onOk(values);
         })
     }
-    /*对外暴露form的实例*/
-    generateFormInstance = () => {
-        return this.generateForm;
+    /*取消*/
+    handelCancel = () => {
+        this.props.onCancel && this.props.onCancel();
+    }
+    /*对外暴露Modal的实例*/
+    getForm = () => {
+        return this.generateModal.getForm();
     }
 
     render() {
-        const {modalForm, visible, modalKey, onCancel, title, width = 700, hasOkBtn = true,okText = '确定', cancelText = '取消'} = this.props;
+        const {modalForm, visible, key, title, width = 700, hasOkBtn = true, okText = '确定', hasCancelBtn = true, cancelText = '取消'} = this.props;
         const modalOpts = {
-            className: 'oil-modal',
-            title,
             visible,
+            key,
+            title,
             width,
             maskClosable: false,
-            onCancel,
+            onCancel: this.handelCancel,
             footer: <div>
-                <Button onClick={onCancel}>{cancelText}</Button>
-                {hasOkBtn && <Button onClick={this.handleOk} type="primary">{okText}</Button>}
+                {hasCancelBtn && <Button onClick={this.handelCancel}>{cancelText}</Button>}
+                {hasOkBtn && <Button onClick={this.handelOk} type="primary">{okText}</Button>}
             </div>
         };
 
@@ -40,8 +45,8 @@ export default class GenerateModal extends React.Component {
         })
 
         return (
-            <Modal {...modalOpts} key={modalKey} className={styles.generateModal}>
-                <GenerateForm formSet={modalForm}  wrappedComponentRef={el => (this.generateForm = el)}/>
+            <Modal {...modalOpts} className={styles.generateModal}>
+                <GenerateForm formSet={modalForm} wrappedComponentRef={el => (this.generateModal = el)}/>
             </ Modal>
         )
     }

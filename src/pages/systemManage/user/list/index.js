@@ -14,6 +14,8 @@ class User extends React.Component {
 
     //搜索列表
     searchHandel = (searchForm) => {
+        console.log(this.listFilter);
+        debugger
         this.queryUserList({
             pageNum: 1,
             searchForm
@@ -131,8 +133,8 @@ class User extends React.Component {
     /*密码二次确认*/
     comfirmPassword = (rule, value, callback) => {
         /*通过ref获取子组件的状态*/
-        let generateFormInstance = this.generateModal.generateFormInstance()
-        let {getFieldValue} = generateFormInstance;
+        debugger
+        let {getFieldValue} = this.generateModal.getForm();
 
         if (value && value !== getFieldValue('password')) {
             callback('两次输入密码不一致！');
@@ -176,7 +178,7 @@ class User extends React.Component {
                     <Button type="primary" onClick={this.resetPwdHandel}>重置密码</Button>
                 </SubHeader>
                 <div className="padding20">
-                    <ListFilter {...listFilterProps}/>
+                    <ListFilter {...listFilterProps} ref={el => this.listFilter = el} />
                     <Table columns={columns} dataSource={userTableList} pagination={pagination} rowKey={record => record.partyName}/>
                 </div>
                 <GenerateModal {...modalProps} ref={el => this.generateModal = el}/>
