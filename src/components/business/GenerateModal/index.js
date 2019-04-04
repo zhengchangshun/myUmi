@@ -17,7 +17,7 @@ export default class GenerateModal extends React.Component {
     handelCancel = () => {
         this.props.onCancel && this.props.onCancel();
     }
-    /*对外暴露Modal的实例*/
+    /*对外暴露Form的实例*/
     getForm = () => {
         return this.generateModal.getForm();
     }

@@ -20,7 +20,7 @@ export default class ListFilter extends React.Component {
         /*对外暴露reset方法*/
         this.props.onReset && this.props.onReset()
     }
-    /*对外暴露form的实例*/
+    /*对外暴露Form的实例*/
     getForm = () => {
         return this.listFilter.getForm();
     }

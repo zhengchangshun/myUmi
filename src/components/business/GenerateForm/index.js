@@ -90,7 +90,7 @@ class GenerateForm extends React.Component {
             callback && callback(errors, fieldsValue);
         });
     };
-    /*form 实例*/
+    /*form实例*/
     getForm = () => {
         return this.props.form
     }
