@@ -1,1 +1,4 @@
-export const userLayoutConfig = ['/login'];
+export const userLayoutConfig = [
+    '/login',
+    '/register'
+];

@@ -28,10 +28,6 @@ export default class BasicLayout extends React.Component {
         const {global, children, dispatch} = this.props;
         const {userInfo, menuList} = global;
 
-        const authProps = {
-            userInfo,
-            menuList,
-        };
         const headerProps = {
             userInfo,
             onExit: () => {
