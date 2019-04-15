@@ -14,9 +14,10 @@ export default class ListFilter extends React.Component {
             this.props.onSearch && this.props.onSearch(values);
         })
     }
+
     /*重置*/
     onReset = () => {
-        this.getForm().resetFields();
+        this.getForm.resetFields();
         /*对外暴露reset方法*/
         this.props.onReset && this.props.onReset()
     }
@@ -26,7 +27,13 @@ export default class ListFilter extends React.Component {
     }
 
     render() {
-        const {filters, searchBtnText = '查询', resetBtnText = '清除'} = this.props;
+        const {
+            filters,
+            hasSearchBtn = true,
+            hasResetBtn = true,
+            searchBtnText = '查询', /* 搜索按钮文案*/
+            resetBtnText = '清除' /* 清除按钮文案*/
+        } = this.props;
 
         /*搜索列表如果没有设置, 默认为一行3个*/
         filters.forEach(item => {
@@ -41,8 +48,8 @@ export default class ListFilter extends React.Component {
                 <div className={styles.listFilterWrap}>
                     <GenerateForm formSet={filters} wrappedComponentRef={el => (this.listFilter = el)}/>
                     <div className={styles.btnGroup}>
-                        <Button type="primary" onClick={this.onSearch}>{searchBtnText}</Button>
-                        <Button type="default" onClick={this.onReset}>{resetBtnText}</Button>
+                        {hasSearchBtn && <Button type="primary" onClick={this.onSearch}>{searchBtnText}</Button>}
+                        {hasResetBtn && <Button type="default" onClick={this.onReset}>{resetBtnText}</Button>}
                     </div>
                 </div>
             </div>
