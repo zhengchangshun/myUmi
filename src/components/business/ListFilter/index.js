@@ -14,10 +14,9 @@ export default class ListFilter extends React.Component {
             this.props.onSearch && this.props.onSearch(values);
         })
     }
-
     /*重置*/
     onReset = () => {
-        this.getForm.resetFields();
+        this.getForm().resetFields();
         /*对外暴露reset方法*/
         this.props.onReset && this.props.onReset()
     }
@@ -41,7 +40,6 @@ export default class ListFilter extends React.Component {
                 item.span = 8;
             }
         })
-
 
         return (
             <div>
