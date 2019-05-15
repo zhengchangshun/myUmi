@@ -1,14 +1,17 @@
 import fetch from 'dva/fetch';
 import fetchJsonp from 'fetch-jsonp';
 import {message} from 'antd';
+import uuid from 'uuid'
 import {parseJSON, stitchUrlParam, queryString} from './utils'
 
 const specialCode = []
 const contentTypeEnum = ['json', 'form']
 
 let defaultOpts = {
+    credentials: 'same-origin', /*携带cookie*/
     headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'x-requested-with': 'XMLHttpRequest',
     }
 };
 
@@ -52,12 +55,18 @@ function request(url, options, contentType) {
         }
     }
     options = Object.assign({}, defaultOpts, options);
+    /*随机数*/
+    const urlParams = {
+        uuid: uuid.v4(),
+        timestamp: new Date().getTime(),
+    }
+    url = stitchUrlParam(url, queryString(urlParams));
 
     return fetch(url, options)
         .then(checkStatus)
         .then(parseJSON)
         .then((data) => checkResult(url, data))
-        .catch(err => ({err}));
+        .catch(err => (err));
 }
 
 /**
