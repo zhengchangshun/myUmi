@@ -1,4 +1,6 @@
 // ref: https://umijs.org/config/
+import path from 'path';
+
 export default {
     history: 'hash',
     plugins: [
