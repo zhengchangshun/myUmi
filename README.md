@@ -1,4 +1,4 @@
-### 基于Umi搭建的个人Dva脚手架,详情介绍请参考个人CSDN：
+
 
 ##### 1： https://blog.csdn.net/zcs425171513/article/details/88294662
     
